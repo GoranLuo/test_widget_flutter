@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/widget/textFormField.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -102,6 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            const TextFormFieldTest()
           ],
         ),
       ),
@@ -113,3 +116,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
