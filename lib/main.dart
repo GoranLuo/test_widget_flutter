@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/widget/regexp.dart';
 import 'package:untitled/widget/textFormField.dart';
 
 
@@ -104,7 +105,8 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
-            const TextFormFieldTest()
+            const TextFormFieldTest(),
+            Text(testRegExp())
           ],
         ),
       ),
