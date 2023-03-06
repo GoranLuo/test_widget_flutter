@@ -1,13 +1,20 @@
+///  正则匹配的介绍： https://www.runoob.com/regexp/regexp-syntax.html
+///  Flutter常用正则: https://www.jianshu.com/p/8b4cc0dc3309
 import 'package:flutter/material.dart';
 
 String testRegExp() {
   ///  r'[\w+]'：表示匹配一个字母或者数字，等同于一个 [a-zA-Z0-9_]，
   ///  r'(\w+)': 表示匹配一段字符串，这段字符串由字母、数字和_组成。
-
   String? valueReturn = '';
   RegExp expRegExp = RegExp(r'(ba)');
   String strRegExp = '   Par@se my string';
   //  String strRegExp = '  ';
+  ///  正向预查、反向预查（正则匹配中的条件匹配）
+  ///  正向预查（?=，?<=）：在任何开始匹配圆括号内的正则表达式模式的位置来匹配搜索字符串。 ?= 相当与 if ==；
+  ///  负向预查（?!，?<!）：在任何开始不匹配该正则表达式模式的位置来匹配搜索字符串。 ?! 相当与 if !=；
+  ///  exp1(?=exp2)：查找 exp2 前面的 exp1。   (?<=exp2)exp1：查找 exp2 后面的 exp1。
+  ///  exp1(?!exp2)：查找后面不是 exp2 的 exp1。   (?<!exp2)exp1：查找前面不是 exp2 的 exp1。
+
 
   /// You should prefer to use a raw string as argument to the [RegExp]
   /// constructor, because it makes it easy to write
@@ -35,10 +42,24 @@ String testRegExp() {
   // // String strRegExp1 = 'aaBBa';
   // String strRegExp1 = 'Badce_d';
 
-/// firstMatch:  This method searches a string for the first position where the regexp matches.
-/// 在字符串中搜索和regexp匹配的子字符串，如果找到，返回第一个匹配的子字符串的位置，否则返回 Null。如下面的例子中，
-/// 没有找到匹配的子字符串，所以 match 是 Null。这时候调用 match![0] 会产生异常。
-/* firstMatch */
+  ///   * 和 + 限定符都是贪婪的，因为它们会尽可能多的匹配文字，只有在它们的后面加上一个 ? 就可以实现非贪婪或最小匹配。
+  ///   贪婪：尽可能多的匹配文字，直到字符串（strRegExp1）的后面没有和 regular expression string 的 */+ 后面的
+  ///   表达式（如下例子中 * 后面的 >R）相同的子字符串；
+  // RegExp expRegExp1 = RegExp(r'<.*?>');
+  RegExp expRegExp1 = RegExp(r'<.*>');
+  // RegExp expRegExp1 = RegExp(r'<.*>R');
+  String strRegExp1 = '<h1>RUNOOB-菜鸟教程</h1>';
+  try{
+    RegExpMatch? match = expRegExp1.firstMatch(strRegExp1);
+    return (match![0]).toString();
+  } catch (e) {
+    return e.toString();
+  }
+
+  /// firstMatch:  This method searches a string for the first position where the regexp matches.
+  /// 在字符串中搜索和regexp匹配的子字符串，如果找到，返回第一个匹配的子字符串的位置，否则返回 Null。如下面的例子中，
+  /// 没有找到匹配的子字符串，所以 match 是 Null。这时候调用 match![0] 会产生异常。
+/* firstMatch
   try {
     RegExpMatch? match = expRegExp.firstMatch(strRegExp);
     /// pattern: The source regular expression string used to create this `RegExp`
@@ -50,11 +71,11 @@ String testRegExp() {
   } catch (e) {
     return e.toString();
   }
+*/
 
 
-
-/// allMatches:  look for all matches of a regular expression in a string.
-/// 在字符串中搜索所有和regexp匹配的子字符串，如果找到，返回所有匹配的子字符串的迭代对象，否则返回 Nall。
+  /// allMatches:  look for all matches of a regular expression in a string.
+  /// 在字符串中搜索所有和regexp匹配的子字符串，如果找到，返回所有匹配的子字符串的迭代对象，否则返回 Nall。
 /*  allMatches
   try{
     Iterable<RegExpMatch> matches = expRegExp.allMatches(strRegExp);
@@ -68,8 +89,8 @@ String testRegExp() {
  }
 */
 
-/// hasMatch: Checks whether this regular expression has a match in the input.
-/// 查看字符串中是否有和regexp匹配的子字符串，返回值是bool类型。
+  /// hasMatch: Checks whether this regular expression has a match in the input.
+  /// 查看字符串中是否有和regexp匹配的子字符串，返回值是bool类型。
 /*  [^xxx]测试       hasMatch测试
   try {
     bool ifMatch = expRegExp1.hasMatch(strRegExp1);
@@ -82,3 +103,59 @@ String testRegExp() {
   }
 */
 }
+
+
+///  部分常用正则： https://www.jianshu.com/p/8b4cc0dc3309
+/*
+///手机号验证
+static bool isChinaPhoneLegal(String str) {
+return RegExp(
+r"^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$")
+    .hasMatch(str);
+}
+
+///邮箱验证
+static bool isEmail(String str) {
+return RegExp(
+r"^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$")
+    .hasMatch(str);
+}
+///验证URL
+static bool isUrl(String value) {
+return RegExp(
+r"^((https|http|ftp|rtsp|mms)?:\/\/)[^\s]+")
+    .hasMatch(value);
+}
+
+///验证身份证
+static bool isIdCard(String value) {
+return RegExp(
+r"\d{17}[\d|x]|\d{15}")
+    .hasMatch(value);
+}
+
+///验证中文
+static bool isChinese(String value) {
+return RegExp(
+r"[\u4e00-\u9fa5]")
+    .hasMatch(value);
+}
+
+// 验证是否为纯字母
+static bool isLetter(String str) {
+final reg = RegExp(r"^[ZA-ZZa-z_]+$");
+return reg.hasMatch(str);
+}
+
+// 验证是否为数字
+static bool isNumber(String str) {
+final reg = RegExp(r"^[0-9_]+$");
+return reg.hasMatch(str);
+}
+
+//验证是否包含特殊字符
+static bool isHaveSpecialCharacters(String input) {
+final reg = new RegExp(r'[`~!@#$%^&*()_+=|;:(){}'',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？-]');
+return reg.hasMatch(input);
+}
+*/
